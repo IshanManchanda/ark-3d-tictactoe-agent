@@ -49,16 +49,20 @@ class AIAgent:
 
 		# Opponent's mark
 		opp_mark = '2' if self.mark == '1' else '1'
-		alpha, beta = float('-inf'), float('inf')
+
+		# Compute the number of possible actions and get the depth
+		possible_actions = AIAgent.get_available_actions(state)
+		depth = len(possible_actions) - 1
 
 		# Iterate over all possible moves
-		for action in AIAgent.get_available_actions(state):
+		for action in possible_actions:
 			# Get the state after performing the move
 			child = after_action_state(state, self.mark + action)
 
 			# Use the negamax variant of the minimax algorithm to get
 			# the evaluation of the state after the selected move
-			child_eval = -AIAgent.negamax(child, 8, alpha, beta, opp_mark)
+			child_eval = -AIAgent.negamax(child, depth, opp_mark)
+			print(child[0], child_eval)
 
 			# If this is better than our current best move, select it
 			if child_eval > best_eval:
@@ -69,7 +73,7 @@ class AIAgent:
 		return self.mark + best_action
 
 	@staticmethod
-	def negamax(state, depth, alpha, beta, mark):
+	def negamax(state, depth, mark):
 		# We use the negamax variant of the minimax algorithm as it's more
 		# convenient and applies perfectly well since TTT is a zero-sum game.
 		# The algorithms are equivalent, with the only difference being
@@ -157,7 +161,7 @@ def main():
 	env = TicTacToeEnv()
 	marks = ['1', '2']
 	shuffle(marks)
-	agents = [HumanAgent(marks[0]), AIAgent(marks[0])]
+	agents = [HumanAgent(marks[0]), AIAgent(marks[1])]
 	episode = 0
 	done = False
 	moves = 0
