@@ -1,4 +1,3 @@
-import sys
 from random import shuffle
 
 from gym_tictactoe.envs.tictactoe_env import \
