@@ -62,7 +62,6 @@ class AIAgent:
 			# Use the negamax variant of the minimax algorithm to get
 			# the evaluation of the state after the selected move
 			child_eval = -AIAgent.negamax(child, depth, opp_mark)
-			print(child[0], child_eval)
 
 			# If this is better than our current best move, select it
 			if child_eval > best_eval:
@@ -157,35 +156,47 @@ class AIAgent:
 
 
 def main():
-	# Driver code to run the 2D human-vs-AI TicTacToe
+	# Driver code to run 2D human-vs-AI TicTacToe
+	# Create environment
 	env = TicTacToeEnv()
+
+	# Assign player 1 and 2 randomly to human and agent
 	marks = ['1', '2']
 	shuffle(marks)
 	agents = [HumanAgent(marks[0]), AIAgent(marks[1])]
-	episode = 0
-	done = False
+
+	# Counter for moves to check if game ended in draw
 	moves = 0
-	while not done:
+
+	# TODO: Add prints for human turn and agent turn, add space between board renders
+
+	while True:
+		# Get the player to move
 		agent = agent_by_mark(agents, str(env.show_turn()))
-		print(agent.mark)
+
+		# Get possible moves for this player and ask for chosen move
 		ava_actions = env.available_actions()
 		action = agent.act(ava_actions, env._world)
-		print(action)
+
+		# Check if human wants to quit
 		if action is None:
-			sys.exit()
+			print("==== Exiting. ====")
+			break
 
+		# Perform the move and render the board
 		state, reward, done, info = env.step(action)
-
-		print()
 		env.render()
+
+		# If game over, show result and break
 		if done:
 			env.show_result()
 			break
+
+		# Else increment move and check for draw
 		moves += 1
 		if moves == 9:
-			print("Draw.")
+			print("==== Finished: Game ended in draw. ====")
 			break
-	episode += 1
 
 
 if __name__ == '__main__':
