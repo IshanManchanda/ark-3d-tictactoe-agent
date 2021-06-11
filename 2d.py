@@ -164,11 +164,10 @@ def main():
 	marks = ['1', '2']
 	shuffle(marks)
 	agents = [HumanAgent(marks[0]), AIAgent(marks[1])]
+	print(f'Human: Player {marks[0]}. Machine: Player {marks[1]}')
 
 	# Counter for moves to check if game ended in draw
 	moves = 0
-
-	# TODO: Add prints for human turn and agent turn, add space between board renders
 
 	while True:
 		# Get the player to move
@@ -186,6 +185,7 @@ def main():
 		# Perform the move and render the board
 		state, reward, done, info = env.step(action)
 		env.render()
+		print()
 
 		# If game over, show result and break
 		if done:
