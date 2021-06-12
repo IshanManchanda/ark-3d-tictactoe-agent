@@ -1,5 +1,5 @@
 from random import shuffle
-
+import time
 from gym_tictactoe.envs.tictactoe_env import \
 	TicTacToeEnv, after_action_state, \
 	agent_by_mark, check_game_status
@@ -14,19 +14,18 @@ class HumanAgent:
 		# Loop until valid input
 		while True:
 			# Get user input and check for quit signal
-			inp = input('Enter position [00 - 22], q for quit: ')
-			if inp.lower() == 'q':
+			action = input('Enter position [000 - 222], q for quit: ')
+			if action.lower() == 'q':
 				return None
 
 			try:
-				# Check if input is valid
-				action = '0' + inp
+				# Test if input is valid
 				if action not in ava_actions:
 					raise ValueError()
 
 			# Continue iterating if input invalid, otherwise break and return
 			except ValueError:
-				print(f"Illegal position: '{inp}'")
+				print(f"Illegal position: '{action}'")
 			else:
 				break
 
@@ -37,7 +36,7 @@ class AIAgent:
 	# Agent that implements the minimax algorithm
 
 	# Array that stores evaluations for positions
-	dp = [None] * 3 ** 9
+	dp = {}
 
 	def __init__(self, mark):
 		self.mark = mark
@@ -58,9 +57,12 @@ class AIAgent:
 			# Get the state after performing the move
 			child = after_action_state(state, self.mark + action)
 
+			start = time.perf_counter()
 			# Use the negamax variant of the minimax algorithm to get
 			# the evaluation of the state after the selected move
 			child_eval = -AIAgent.negamax(child, depth, opp_mark)
+			end = time.perf_counter()
+			print("Evaluated 1 child with time:", end - start)
 
 			# If this is better than our current best move, select it
 			if child_eval > best_eval:
@@ -82,7 +84,7 @@ class AIAgent:
 		# Check if we have already computed this state.
 		# We map each state to an index and use that for the dp table.
 		state_idx = AIAgent.get_idx(state)
-		if AIAgent.dp[state_idx] is not None:
+		if state_idx in AIAgent.dp:
 			# If we have the evaluation, simply return it
 			return AIAgent.dp[state_idx]
 
@@ -121,21 +123,13 @@ class AIAgent:
 
 		# Store the computed evaluation and return it
 		AIAgent.dp[state_idx] = max_eval
+		print(len(AIAgent.dp))
 		return max_eval
 
 	@staticmethod
 	def get_idx(state):
 		# Helper function to map states to unique ids in the DP table
-
-		# Realize that the board is entirely represented by 9 ordered variables
-		# that take on values 0, 1, and 2
-		# This allows us to conveniently generate one-one indexes using
-		# ternary numbers (base 3)
-		idx = 0
-		for i in range(3):
-			for j in range(3):
-				idx += state[0][i][j] * 3 ** (3 * i + j)
-		return idx
+		return ''.join(str(z) for x in state for y in x for z in y)
 
 	@staticmethod
 	def get_available_actions(state):
@@ -148,9 +142,10 @@ class AIAgent:
 
 		for i in range(3):
 			for j in range(3):
-				# Check if position vacant and add it as a valid move
-				if state[0][i][j] == 0:
-					available.append(f'{0}{i}{j}')
+				for k in range(3):
+					# Check if position vacant and add it as a valid move
+					if state[i][j][k] == 0:
+						available.append(f'{i}{j}{k}')
 		return available
 
 
@@ -161,7 +156,7 @@ def main():
 
 	# Assign player 1 and 2 randomly to human and agent
 	marks = ['1', '2']
-	shuffle(marks)
+	# shuffle(marks)
 	agents = [HumanAgent(marks[0]), AIAgent(marks[1])]
 	print(f'Human: Player {marks[0]}. Machine: Player {marks[1]}')
 
@@ -193,9 +188,9 @@ def main():
 
 		# Else increment move and check for draw
 		moves += 1
-		if moves == 9:
-			print("==== Finished: Game ended in draw. ====")
-			break
+		# if moves == 9:
+			# print("==== Finished: Game ended in draw. ====")
+			# break
 
 
 if __name__ == '__main__':
