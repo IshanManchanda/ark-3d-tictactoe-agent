@@ -66,5 +66,5 @@ class Memory:
 			return [x.copy() for x in self.memory]
 
 		# Sample indices and pick corresponding elements
-		indices = np.random.choice(range(self.size), batch_size)
+		indices = np.random.choice(self.size, batch_size)
 		return [x[indices].copy() for x in self.memory]
