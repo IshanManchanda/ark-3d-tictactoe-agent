@@ -1,0 +1,2 @@
+git+git://github.com/Cypre55/gym-tictactoe3d@c74a4a9632dd00f8d3efdcc96750f9a6bb0e1793#gym-tictactoe
+tensorflow==2.5.0
