@@ -34,7 +34,7 @@ def get_available_actions(state):
 
 def flatten_state(state):
 	# return [c for b in state for r in b for c in r]
-	return state.flatten()
+	return state.flatten().reshape(1, 27)
 
 
 def get_action_from_idx(idx):

@@ -10,17 +10,6 @@ class Memory:
 		self.input_shape = None
 		self.size = 0
 
-	@property
-	def max_size(self):
-		return self.max_size
-
-	@max_size.setter
-	def max_size(self, value):
-		if 0 < value < self.max_size:
-			for i in range(3):
-				self.memory[i] = self.memory[i][:value]
-		self.max_size = value
-
 	def reset_memory(self):
 		self.memory = [None, None, None, None]
 

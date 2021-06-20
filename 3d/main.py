@@ -1,5 +1,6 @@
 from random import shuffle
 
+import numpy as np
 from gym_tictactoe.envs.tictactoe_env import TicTacToeEnv, agent_by_mark
 
 from agent import DQNAgent
@@ -52,7 +53,7 @@ def main():
 
 		# Get possible moves for this player and ask for chosen move
 		ava_actions = env.available_actions()
-		action = agent.act(ava_actions, env._world)
+		action = agent.act(ava_actions, np.array(env._world))
 
 		# Check if human wants to quit
 		if action is None:
