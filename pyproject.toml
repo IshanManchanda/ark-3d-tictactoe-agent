@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ark-3d-tictactoe-agent"
+version = "0.1.0"
+description = ""
+authors = ["Ishan Manchanda <ishanmanchanda70@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+gym-tictactoe = {git = "https://github.com/Cypre55/gym-tictactoe3d.git", rev = "c74a4a9632dd00f8d3efdcc96750f9a6bb0e1793"}
+tensorflow = "^2.6.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
